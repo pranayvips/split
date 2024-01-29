@@ -545,3 +545,12 @@ document.getElementsByClassName("mob-home")[0].addEventListener("click", () => {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
 });
+
+
+document.getElementsByClassName("logo")[0].addEventListener("click",()=>{
+  document.getElementsByClassName("sidebar")[0].style.animationName =
+    "sidebar_width_mob_1";
+  setTimeout(() => {
+    document.getElementsByClassName("sidebar")[0].style.display = "none";
+  }, 450);
+})
