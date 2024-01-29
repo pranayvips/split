@@ -682,10 +682,15 @@ header .search input:focus {
   }
   .container .screen .add-friend div {
     align-items: center;
+    column-gap: 15px !important;
   }
   .container .screen .add-friend div svg {
     height: 45px;
     margin-top: -10px;
+  }
+  .payment .get-pay .input {
+    width: 80%;
+    margin: 0 auto;
   }
   .container {
     height: calc(100vh - 150px);
