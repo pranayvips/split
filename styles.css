@@ -839,6 +839,7 @@ header .search input:focus {
   padding: 15px 10px;
   row-gap: 10px;
   animation: fade_in 0.5s ease-in;
+  z-index: 150;
 }
 .notification h1 {
   font-size: 25px;
