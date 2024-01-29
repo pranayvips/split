@@ -554,3 +554,11 @@ document.getElementsByClassName("logo")[0].addEventListener("click",()=>{
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
 })
+
+
+let sidebar_tab = document.getElementsByClassName("tab")[0].children
+for (let i of sidebar_tab){
+  i.addEventListener("click",()=>{
+    show_notification("Hang On!!","This feature will be added soon...")
+  })
+}
