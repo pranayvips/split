@@ -5,13 +5,15 @@ let payment_input = document.getElementById("pay-val");
 let payer_name = document.getElementById("payer");
 
 const friends_list = {};
-const friends_list_log = {}
+const friends_list_log = {};
 function add_friend_name() {
   let val = name_input_box.value;
-  if (val in friends_list){
-    show_notification("Error: Already there","The name you entered has already been entered")
-  }
-  else if (val.length > 0) {
+  if (val in friends_list) {
+    show_notification(
+      "Error: Already there",
+      "The name you entered has already been entered"
+    );
+  } else if (val.length > 0) {
     friends_list[val] = 0;
     friends_list_log[val] = [];
     add_member(val);
@@ -150,12 +152,12 @@ function add_member(name) {
     "M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z",
     "Past Transactions"
   );
-  showTransactionsSvg.addEventListener("click",()=>{
-    create_desc_table()
+  showTransactionsSvg.addEventListener("click", () => {
+    create_desc_table();
     transaction_update(name);
     page(2);
-    document.getElementById("tran-name").textContent = name
-  })
+    document.getElementById("tran-name").textContent = name;
+  });
   actionDiv.appendChild(showTransactionsSvg);
 
   var newPaymentSvg = createSvgElement(
@@ -178,7 +180,7 @@ function add_member(name) {
       delete friends_list[name];
       delete friends_list_log[name];
       container.remove();
-      document.getElementsByClassName(name+"-pay")[0].remove()
+      document.getElementsByClassName(name + "-pay")[0].remove();
     }
   });
   actionDiv.appendChild(deleteUserSvg);
@@ -193,22 +195,23 @@ function add_member(name) {
   member_container.appendChild(container);
 }
 
-let sidebar_click = 0
-function sidebar_do(){
-  if (sidebar_click == 0){
-    document.getElementsByClassName("sidebar")[0].style.display = "block"
-    document.getElementsByClassName("screen")[0].style.paddingLeft = "18%"
-    sidebar_click=1
-  }
-  else{
-    document.getElementsByClassName("sidebar")[0].style.display = "none"
-    document.getElementsByClassName("screen")[0].style.paddingLeft = "0"
-    sidebar_click=0
+let sidebar_click = 0;
+function sidebar_do() {
+  if (sidebar_click == 0) {
+    document.getElementsByClassName("sidebar")[0].style.display = "block";
+    document.getElementsByClassName("screen")[0].style.paddingLeft = "18%";
+    sidebar_click = 1;
+  } else {
+    document.getElementsByClassName("sidebar")[0].style.display = "none";
+    document.getElementsByClassName("screen")[0].style.paddingLeft = "0";
+    sidebar_click = 0;
   }
 }
-document.getElementsByClassName("sidebar-logo")[0].addEventListener("click",()=>{
-  sidebar_do()
-})
+document
+  .getElementsByClassName("sidebar-logo")[0]
+  .addEventListener("click", () => {
+    sidebar_do();
+  });
 // function add_member(name, to) {
 //   let member = document.createElement("div");
 //   member.setAttribute("title", name);
@@ -252,21 +255,27 @@ function calculations() {
   let per_person = payment_input.value / selected_count;
   let list_of_person = document.getElementsByClassName("member-clicked");
   let if_there = 0;
-  friends_list_log[selected_person].push(['Spent ',payment_input.value])
+  friends_list_log[selected_person].push(["Spent ", payment_input.value]);
   for (let i = 0; i < list_of_person.length; i++) {
     friends_list[list_of_person[i].getAttribute("title")] =
       parseFloat(friends_list[list_of_person[i].getAttribute("title")]) -
       per_person;
-    friends_list_log[list_of_person[i].getAttribute("title")].push(['Recieved from "'+selected_person+'" <br \> On total transaction of '+payment_input.value,-per_person])
-    if (list_of_person[i].getAttribute("title") == selected_person ){
-      if_there=1;
+    friends_list_log[list_of_person[i].getAttribute("title")].push([
+      'Recieved from "' +
+        selected_person +
+        '" <br > On total transaction of ' +
+        payment_input.value,
+      -per_person,
+    ]);
+    if (list_of_person[i].getAttribute("title") == selected_person) {
+      if_there = 1;
     }
   }
-  if (if_there){
-    friends_list_log[selected_person].pop()
-  friends_list_log[selected_person].push(['Spent own money',-per_person])
+  if (if_there) {
+    friends_list_log[selected_person].pop();
+    friends_list_log[selected_person].push(["Spent own money", -per_person]);
   }
-  
+
   friends_list[selected_person] =
     parseFloat(friends_list[selected_person]) + parseFloat(payment_input.value);
   payment_input.value = "";
@@ -318,61 +327,57 @@ function reset() {
   }
 }
 
-
-
-function create_ele_desc(desc,amt){
+function create_ele_desc(desc, amt) {
   var newRow = document.createElement("tr");
 
-        // Create and append the first cell with content "a"
-        var cell1 = document.createElement("td");
-        cell1.innerHTML = desc;
-        newRow.appendChild(cell1);
+  // Create and append the first cell with content "a"
+  var cell1 = document.createElement("td");
+  cell1.innerHTML = desc;
+  newRow.appendChild(cell1);
 
-        // Create and append the second cell with content "h"
-        var cell2 = document.createElement("td");
-        cell2.textContent = amt;
-        if (parseFloat(amt)>0){
-          cell2.setAttribute("class","green")
-        }
-        else{
-          cell2.setAttribute("class","red")
-        }
-        newRow.appendChild(cell2);
-        document.getElementById("desc").appendChild(newRow)
+  // Create and append the second cell with content "h"
+  var cell2 = document.createElement("td");
+  cell2.textContent = amt;
+  if (parseFloat(amt) > 0) {
+    cell2.setAttribute("class", "green");
+  } else {
+    cell2.setAttribute("class", "red");
+  }
+  newRow.appendChild(cell2);
+  document.getElementById("desc").appendChild(newRow);
 }
-function transaction_update(name){
-  let data = friends_list_log[name]
+function transaction_update(name) {
+  let data = friends_list_log[name];
 
-  for (let i of data){
-    create_ele_desc(i[0],i[1])
+  for (let i of data) {
+    create_ele_desc(i[0], i[1]);
   }
 }
-function create_desc_table(){
-  var myTable = document.createElement("table")
-  myTable.setAttribute("id","desc")
-    // Create a new table row
-    var newRow = document.createElement('tr');
-    newRow.className = 'head';
+function create_desc_table() {
+  var myTable = document.createElement("table");
+  myTable.setAttribute("id", "desc");
+  // Create a new table row
+  var newRow = document.createElement("tr");
+  newRow.className = "head";
 
-    // Create table header cells and add text
-    var descriptionHeader = document.createElement('th');
-    descriptionHeader.textContent = 'Description';
+  // Create table header cells and add text
+  var descriptionHeader = document.createElement("th");
+  descriptionHeader.textContent = "Description";
 
-    var amountHeader = document.createElement('th');
-    amountHeader.textContent = 'Amount';
+  var amountHeader = document.createElement("th");
+  amountHeader.textContent = "Amount";
 
-    // Append the header cells to the new row
-    newRow.appendChild(descriptionHeader);
-    newRow.appendChild(amountHeader);
+  // Append the header cells to the new row
+  newRow.appendChild(descriptionHeader);
+  newRow.appendChild(amountHeader);
 
-    myTable.appendChild(newRow)
-  document.getElementsByClassName("table-div")[0].appendChild(myTable)
-
+  myTable.appendChild(newRow);
+  document.getElementsByClassName("table-div")[0].appendChild(myTable);
 }
-document.getElementById("trans-back").addEventListener("click",()=>{
+document.getElementById("trans-back").addEventListener("click", () => {
   page(1);
-  document.getElementById("desc").remove()
-})
+  document.getElementById("desc").remove();
+});
 
 function page(num) {
   if (num == 0) {
@@ -380,18 +385,16 @@ function page(num) {
       "none";
     document.getElementsByClassName("add-friend")[0].style.display = "none";
     document.getElementsByClassName("payment")[0].style.display = "grid";
-  } else if (num == 2){
-    document.getElementsByClassName("transaction")[0].style.display =
-      "flex";
-      document.getElementsByClassName("member-container")[0].style.display =
+  } else if (num == 2) {
+    document.getElementsByClassName("transaction")[0].style.display = "flex";
+    document.getElementsByClassName("member-container")[0].style.display =
       "none";
     document.getElementsByClassName("add-friend")[0].style.display = "none";
-  }
-  else {
+  } else {
     document.getElementsByClassName("member-container")[0].style.display =
       "grid";
     document.getElementsByClassName("add-friend")[0].style.display = "block";
-    document.getElementsByClassName("transaction")[0].style.display ="none"
+    document.getElementsByClassName("transaction")[0].style.display = "none";
     document.getElementsByClassName("payment")[0].style.display = "none";
   }
 }
@@ -427,13 +430,13 @@ function calculator_button(val, cat) {
     });
   } else if (cat == 1) {
     but.setAttribute("class", "cal-equ");
-    but.addEventListener("click",()=>{
-      let inp_box = document.getElementById("inp-cal")
-      let res_box = document.getElementById("res-cal")
-      let result = eval(inp_box.value)
-      res_box.textContent = inp_box.value
+    but.addEventListener("click", () => {
+      let inp_box = document.getElementById("inp-cal");
+      let res_box = document.getElementById("res-cal");
+      let result = eval(inp_box.value);
+      res_box.textContent = inp_box.value;
       inp_box.value = result;
-    })
+    });
   }
   button_ele.appendChild(but);
 }
@@ -523,24 +526,22 @@ cal_ico.addEventListener("click", () => {
   } else {
     cal_click = 0;
     calculator.style.display = "none";
-    document.getElementById("inp-cal").value = ""
-    document.getElementById("res-cal").textContent = "Ans = 0"
+    document.getElementById("inp-cal").value = "";
+    document.getElementById("res-cal").textContent = "Ans = 0";
   }
 });
 
+document.getElementsByClassName("mob-set")[0].addEventListener("click", () => {
+  mob_click = 1;
+  document.getElementsByClassName("sidebar")[0].style.display = "block";
+  document.getElementsByClassName("sidebar")[0].style.animationName =
+    "sidebar_width_mob";
+});
 
-document.getElementsByClassName("mob-set")[0].addEventListener("click",()=>{
-
-mob_click=1
-document.getElementsByClassName("sidebar")[0].style.display ="block"
-    document.getElementsByClassName("sidebar")[0].style.animationName = "sidebar_width_mob"
-
-
-})
-
-document.getElementsByClassName("mob-home")[0].addEventListener("click",()=>{
-    document.getElementsByClassName("sidebar")[0].style.animationName = "sidebar_width_mob_1"
-    setTimeout(() => {
-      document.getElementsByClassName("sidebar")[0].style.display ="none"
-    }, 450);
-})
+document.getElementsByClassName("mob-home")[0].addEventListener("click", () => {
+  document.getElementsByClassName("sidebar")[0].style.animationName =
+    "sidebar_width_mob_1";
+  setTimeout(() => {
+    document.getElementsByClassName("sidebar")[0].style.display = "none";
+  }, 450);
+});
