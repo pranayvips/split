@@ -3,27 +3,68 @@ let member_container = document.getElementsByClassName("member-container")[0];
 let payment_container = document.getElementsByClassName("payment")[0];
 let payment_input = document.getElementById("pay-val");
 let payer_name = document.getElementById("payer");
+let LOGED_IN = 0;
+function update_set_data() {
+  if (LOGED_IN) {
+    let name = JSON.stringify(friends_list);
+    let data = JSON.stringify(friends_list_log);
+      localStorage.setItem("name", name);
+      localStorage.setItem("data", data);
+  }
+}
 
-const friends_list = {};
-const friends_list_log = {};
-function add_friend_name() {
-  let val = name_input_box.value;
-  if (val in friends_list) {
-    show_notification(
-      "Error: Already there",
-      "The name you entered has already been entered"
-    );
-  } else if (val.length > 0) {
-    friends_list[val] = 0;
-    friends_list_log[val] = [];
-    add_member(val);
-    add_member_payement(val);
-    name_input_box.value = "";
+var friends_list = {};
+var friends_list_log = {};
+
+function check_log_in() {
+  let datas = localStorage.getItem("user");
+  if (datas) {
+    document.getElementsByClassName("log-ele")[0].textContent =
+      datas.split(";;")[0];
+    document.getElementsByClassName(
+      "log-ele"
+    )[1].innerHTML = `<span class="log-ele">Signed In </span><br />:)`;
+    document.getElementsByClassName("signup")[0].remove();
+    LOGED_IN = 1;
+    if (localStorage.getItem("name")) {
+      friends_list = JSON.parse(localStorage.getItem("name"));
+      friends_list_log = JSON.parse(localStorage.getItem("data"));
+      for (let i in friends_list) {
+        add_friend_name(i);
+        document.getElementById(i + "-mem").textContent = friends_list[i];
+        // console.log(document.getElementById(i + "-mem").textContent)
+      }
+      update_per_person(1);
+    }
+  }
+}
+check_log_in();
+
+function add_friend_name(name = "") {
+  if (name == "") {
+    let val = name_input_box.value;
+    if (val in friends_list) {
+      show_notification(
+        "Error: Already there",
+        "The name you entered has already been entered"
+      );
+    } else if (val.length > 0) {
+      friends_list[val] = 0;
+      friends_list_log[val] = [];
+      update_set_data();
+      add_member(val);
+      add_member_payement(val);
+      name_input_box.value = "";
+    } else {
+      show_notification(
+        "Error; Empty box",
+        "The Name should be greater than 1 character"
+      );
+    }
   } else {
-    show_notification(
-      "Error; Empty box",
-      "The Name should be greater than 1 character"
-    );
+    add_member(name);
+    add_member_payement(name);
+    name_input_box.value = "";
   }
 }
 document.getElementById("friend-add").addEventListener("click", () => {
@@ -52,7 +93,7 @@ function add_member_payement(name) {
   });
   payment_container.appendChild(member);
 }
-function add_member(name) {
+function add_member(name = "") {
   var container = document.createElement("div");
   container.setAttribute("title", name);
   container.setAttribute("class", "member " + name + "-mem");
@@ -115,11 +156,11 @@ function add_member(name) {
 
   currentValueDiv.appendChild(valueSvg);
   currentValueDiv.appendChild(valueParagraph);
-  currentValueDiv.setAttribute("title", "Current Status")
-  currentValueDiv.addEventListener("click",()=>{
-  showValDiv.style.animationName = "fade_in"
-    showValDiv.classList.toggle("show-val-dis")
-  })
+  currentValueDiv.setAttribute("title", "Current Status");
+  currentValueDiv.addEventListener("click", () => {
+    showValDiv.style.animationName = "fade_in";
+    showValDiv.classList.toggle("show-val-dis");
+  });
 
   // Create the action section
   var actionDiv = document.createElement("div");
@@ -161,19 +202,17 @@ function add_member(name) {
     transaction_update(name);
     page(2);
     document.getElementById("tran-name").textContent = name;
-    let amt = document.getElementById(name+"-mem").textContent
-    document.getElementById("bal-amt").textContent = amt
-    if (parseFloat(amt) > 0){
-      document.getElementById("bal-amt").style.color = "green"
-      document.getElementById("bal-ico").style.color = "green"
-    }
-    else if(parseFloat(amt)==0){
-      document.getElementById("bal-amt").style.color = "#5f3dc3"
-      document.getElementById("bal-ico").style.color = "#5f3dc3"
-    }
-    else{
-      document.getElementById("bal-amt").style.color = "red"
-      document.getElementById("bal-ico").style.color = "red"
+    let amt = document.getElementById(name + "-mem").textContent;
+    document.getElementById("bal-amt").textContent = amt;
+    if (parseFloat(amt) > 0) {
+      document.getElementById("bal-amt").style.color = "green";
+      document.getElementById("bal-ico").style.color = "green";
+    } else if (parseFloat(amt) == 0) {
+      document.getElementById("bal-amt").style.color = "#5f3dc3";
+      document.getElementById("bal-ico").style.color = "#5f3dc3";
+    } else {
+      document.getElementById("bal-amt").style.color = "red";
+      document.getElementById("bal-ico").style.color = "red";
     }
   });
   actionDiv.appendChild(showTransactionsSvg);
@@ -197,104 +236,103 @@ function add_member(name) {
     if (confirm("Are you sure to delete user " + name + " ?")) {
       delete friends_list[name];
       delete friends_list_log[name];
+      update_set_data();
       container.remove();
       document.getElementsByClassName(name + "-pay")[0].remove();
     }
   });
   actionDiv.appendChild(deleteUserSvg);
 
-
   // Create parent div
-var showValDiv = document.createElement("div");
-showValDiv.className = "show-val";
+  var showValDiv = document.createElement("div");
+  showValDiv.className = "show-val";
 
-// Create first SVG element
-var svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-svg1.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-svg1.setAttribute("fill", "none");
-svg1.setAttribute("viewBox", "0 0 24 24");
-svg1.setAttribute("stroke-width", "1.5");
-svg1.setAttribute("stroke", "currentColor");
+  // Create first SVG element
+  var svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg1.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  svg1.setAttribute("fill", "none");
+  svg1.setAttribute("viewBox", "0 0 24 24");
+  svg1.setAttribute("stroke-width", "1.5");
+  svg1.setAttribute("stroke", "currentColor");
 
-var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-path1.setAttribute("stroke-linecap", "round");
-path1.setAttribute("stroke-linejoin", "round");
-path1.setAttribute("d", "M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z");
+  var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path1.setAttribute("stroke-linecap", "round");
+  path1.setAttribute("stroke-linejoin", "round");
+  path1.setAttribute(
+    "d",
+    "M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
+  );
 
-// Append path to svg1
-svg1.appendChild(path1);
-svg1.addEventListener("click",()=>{
-  showValDiv.style.animationName = "fade_out"
-  setTimeout(() => {
-    showValDiv.classList.toggle("show-val-dis")
-  }, 150);
-})
+  // Append path to svg1
+  svg1.appendChild(path1);
+  svg1.addEventListener("click", () => {
+    showValDiv.style.animationName = "fade_out";
+    setTimeout(() => {
+      showValDiv.classList.toggle("show-val-dis");
+    }, 150);
+  });
 
-// Append svg1 to showValDiv
-showValDiv.appendChild(svg1);
+  // Append svg1 to showValDiv
+  showValDiv.appendChild(svg1);
 
-// Create paragraph element
-var paragraph = document.createElement("p");
-paragraph.setAttribute("align", "center");
-// paragraph.innerHTML = 'In <span>debt</span> of :';
-let spanEle = document.createElement("span")
-spanEle.setAttribute("id",name+"-shw-txt")
-spanEle.appendChild(document.createTextNode("Credit"))
-paragraph.appendChild(spanEle)
+  // Create paragraph element
+  var paragraph = document.createElement("p");
+  paragraph.setAttribute("align", "center");
+  // paragraph.innerHTML = 'In <span>debt</span> of :';
+  let spanEle = document.createElement("span");
+  spanEle.setAttribute("id", name + "-shw-txt");
+  spanEle.appendChild(document.createTextNode("Credit"));
+  paragraph.appendChild(spanEle);
 
-// Append paragraph to showValDiv
-showValDiv.appendChild(paragraph);
+  // Append paragraph to showValDiv
+  showValDiv.appendChild(paragraph);
 
-// Create second div
-var secondDiv = document.createElement("div");
+  // Create second div
+  var secondDiv = document.createElement("div");
 
-// Create second SVG element
-var svg2 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-svg2.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-svg2.setAttribute("fill", "none");
-svg2.setAttribute("viewBox", "0 0 24 24");
-svg2.setAttribute("stroke-width", "1.5");
-svg2.setAttribute("stroke", "currentColor");
+  // Create second SVG element
+  var svg2 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg2.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  svg2.setAttribute("fill", "none");
+  svg2.setAttribute("viewBox", "0 0 24 24");
+  svg2.setAttribute("stroke-width", "1.5");
+  svg2.setAttribute("stroke", "currentColor");
 
-var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-path2.setAttribute("stroke-linecap", "round");
-path2.setAttribute("stroke-linejoin", "round");
-path2.setAttribute("d", "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z");
+  var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path2.setAttribute("stroke-linecap", "round");
+  path2.setAttribute("stroke-linejoin", "round");
+  path2.setAttribute(
+    "d",
+    "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+  );
 
-// Append path to svg2
-svg2.appendChild(path2);
+  // Append path to svg2
+  svg2.appendChild(path2);
 
-// Append svg2 to secondDiv
-secondDiv.appendChild(svg2);
+  // Append svg2 to secondDiv
+  secondDiv.appendChild(svg2);
 
-// Create paragraph element for the number
-var numberParagraph = document.createElement("p");
-numberParagraph.innerHTML = '0';
-numberParagraph.setAttribute("id",name+"-shw-val")
+  // Create paragraph element for the number
+  var numberParagraph = document.createElement("p");
+  numberParagraph.innerHTML = "0";
+  numberParagraph.setAttribute("id", name + "-shw-val");
 
-// Append numberParagraph to secondDiv
-secondDiv.appendChild(numberParagraph);
+  // Append numberParagraph to secondDiv
+  secondDiv.appendChild(numberParagraph);
 
-// Append secondDiv to showValDiv
-showValDiv.appendChild(secondDiv);
-
+  // Append secondDiv to showValDiv
+  showValDiv.appendChild(secondDiv);
 
   // Append everything to the container
   container.appendChild(nameDiv);
   container.appendChild(currentValueDiv);
   container.appendChild(actionDiv);
-  container.appendChild(showValDiv)
+  container.appendChild(showValDiv);
   container.addEventListener("click", () => {
     // ASK THE PERSON TO SELECT ONE THAT IS TO PAY OR TO SHOW THE DETAILS ABOUT THAT USER
   });
   member_container.appendChild(container);
 }
-
-
-
-
-
-
 
 let sidebar_click = 0;
 function sidebar_do() {
@@ -393,38 +431,41 @@ document.getElementById("send").addEventListener("click", () => {
     show_notification("Error : Empty box", "First write some amount");
   } else {
     calculations();
+    update_set_data();
   }
 });
 
-function update_per_person() {
+function update_per_person(log = 0) {
   let ele;
   for (let i in friends_list) {
     ele = document.getElementById(i + "-mem");
-    let value = parseFloat(friends_list[i]).toFixed(2)
+    let value = parseFloat(friends_list[i]).toFixed(2);
     ele.textContent = value;
-    document.getElementById(i+"-shw-val").textContent = value
+    document.getElementById(i + "-shw-val").textContent = value;
     if (value > 0) {
       ele.style.color = "darkgreen";
-      ele.parentElement.setAttribute("title","Credit : "+value)
-      ele.parentElement.style.borderColor = "green"
-      ele.previousSibling.style.stroke = "green"
-      document.getElementById(i+"-shw-txt").textContent = "Credit"
+      ele.parentElement.setAttribute("title", "Credit : " + value);
+      ele.parentElement.style.borderColor = "green";
+      ele.previousSibling.style.stroke = "green";
+      document.getElementById(i + "-shw-txt").textContent = "Credit";
     } else if (value == 0) {
-      ele.parentElement.style.borderColor = "#845ef7"
-      ele.previousSibling.style.stroke = "#845ef7"
+      ele.parentElement.style.borderColor = "#845ef7";
+      ele.previousSibling.style.stroke = "#845ef7";
       ele.style.color = "grey";
-      document.getElementById(i+"-shw-txt").textContent = "Credit"
-      ele.parentElement.setAttribute("title","Equalwidth_animation_out_mob")
+      document.getElementById(i + "-shw-txt").textContent = "Credit";
+      ele.parentElement.setAttribute("title", "Equal");
     } else {
-      ele.previousSibling.style.stroke = "red"
-      ele.parentElement.style.borderColor = "red"
+      ele.previousSibling.style.stroke = "red";
+      ele.parentElement.style.borderColor = "red";
       ele.style.color = "red";
-      document.getElementById(i+"-shw-txt").textContent = "Debt"
-      ele.parentElement.setAttribute("title","Debt : "+value)
+      document.getElementById(i + "-shw-txt").textContent = "Debt";
+      ele.parentElement.setAttribute("title", "Debt : " + value);
     }
   }
-  reset();
-  page(1);
+  if (log == 0) {
+    reset();
+    page(1);
+  }
 }
 
 function reset() {
@@ -522,19 +563,18 @@ document.getElementById("search-ico").addEventListener("click", () => {
       "width_animation_in";
     search_click = 1;
   } else {
-    if (screen.width < 700){
+    if (screen.width < 800) {
       document.getElementById("search").style.animationName =
-      "width_animation_out_mob";
-    document.getElementById("search").parentElement.style.animationName =
-      "width_animation_out_mob";
-    }
-    else{
+        "width_animation_out_mob";
+      document.getElementById("search").parentElement.style.animationName =
+        "width_animation_out_mob";
+    } else {
       document.getElementById("search").style.animationName =
-      "width_animation_out";
-    document.getElementById("search").parentElement.style.animationName =
-      "width_animation_out";
+        "width_animation_out";
+      document.getElementById("search").parentElement.style.animationName =
+        "width_animation_out";
     }
-    
+
     setTimeout(() => {
       document.getElementById("search").parentElement.style.display = "none";
       search_click = 0;
@@ -553,11 +593,15 @@ function calculator_button(val, cat) {
   } else if (cat == 1) {
     but.setAttribute("class", "cal-equ");
     but.addEventListener("click", () => {
-      let inp_box = document.getElementById("inp-cal");
-      let res_box = document.getElementById("res-cal");
-      let result = eval(inp_box.value);
-      res_box.textContent = inp_box.value;
-      inp_box.value = result;
+      try {
+        let inp_box = document.getElementById("inp-cal");
+        let res_box = document.getElementById("res-cal");
+        let result = eval(inp_box.value);
+        res_box.textContent = inp_box.value;
+        inp_box.value = result;
+      } catch (Error) {
+        show_notification("Got an Error", Error);
+      }
     });
   }
   button_ele.appendChild(but);
@@ -641,7 +685,7 @@ document.addEventListener(
   true
 );
 let cal_click = 0;
-function cal_show_hide(){
+function cal_show_hide() {
   if (!cal_click) {
     cal_click = 1;
     calculator.style.display = "block";
@@ -653,11 +697,11 @@ function cal_show_hide(){
   }
 }
 cal_ico.addEventListener("click", () => {
-  cal_show_hide()
+  cal_show_hide();
 });
-document.getElementById("cal-top").addEventListener("click",()=>{
-cal_show_hide()
-})
+document.getElementById("cal-top").addEventListener("click", () => {
+  cal_show_hide();
+});
 
 document.getElementsByClassName("mob-set")[0].addEventListener("click", () => {
   mob_click = 1;
@@ -674,19 +718,23 @@ document.getElementsByClassName("mob-home")[0].addEventListener("click", () => {
   }, 450);
 });
 
-
-document.getElementsByClassName("logo")[0].addEventListener("click",()=>{
+document.getElementsByClassName("logo")[0].addEventListener("click", () => {
   document.getElementsByClassName("sidebar")[0].style.animationName =
     "sidebar_width_mob_1";
   setTimeout(() => {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
-})
+});
 
+try {
+  document.getElementsByClassName("signup")[0].addEventListener("click", () => {
+    location.href = "signup.html";
+  });
+} catch {}
 
-let sidebar_tab = document.getElementsByClassName("tab")[0].children
-for (let i of sidebar_tab){
-  i.addEventListener("click",()=>{
-    show_notification("Hang On!!","This feature will be added soon...")
-  })
+let sidebar_tab = document.getElementsByClassName("in-tab");
+for (let i of sidebar_tab) {
+  i.addEventListener("click", () => {
+    show_notification("Hang On!!", "This feature will be added soon...");
+  });
 }

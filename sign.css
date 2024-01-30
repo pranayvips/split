@@ -1,0 +1,222 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+@keyframes fade-in {
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+@keyframes fade-out {
+    to{opacity: 0;}
+}
+body {
+  background-image: linear-gradient(
+    to right,
+    rgb(242, 143, 255),
+    rgba(0, 189, 214, 255),
+    rgba(1, 242, 143, 255)
+  );
+  overflow: hidden;
+}
+
+.signup {
+  height: 55vh;
+  width: 50vw;
+  margin: 0 auto;
+  margin-top: 50vh;
+  border-radius: 18px;
+  transform: translate(0, -50%);
+  background-image: linear-gradient(to bottom, #dbe4ff8d, #e7f5ff8d);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup h1 {
+  font-family: "Roboto";
+  font-weight: 100;
+  background: linear-gradient(to left, #f32170, #ff6b08,#cd1acd, #f79d2f,#f32170);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+  font-size: 40px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.signup  svg{
+    width: 190px;
+    stroke-width: .1px;
+    color: #ff6b08;
+    margin: 0 auto;
+}
+
+.signup .input{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.form {
+  width: 300px;
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+  align-self: center;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.form input {
+  width: 100%;
+  height: 100%;
+  color: #15aabf;
+  font-family: "Roboto";
+  font-weight: 100;
+  font-size: 25px;
+  padding: 0 12px;
+  padding-top: 10px;
+  letter-spacing: 2px;
+  padding-bottom: 5px;
+  border: none;
+  background-color: transparent;
+}
+.form label {
+  position: absolute;
+  bottom: 0px;
+  font-family: "Roboto";
+    font-weight: 100;
+  left: 0px;
+  width: 100%;
+  font-size: 20px;
+  color: #d9480f;
+  height: 100%;
+  padding-bottom: 20px;
+  pointer-events: none;
+  border-bottom: 1px solid #d9480f;
+}
+.form label::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid #087f5b;
+  border-color: #15aabf;
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
+}
+
+.content-name {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+.form input:focus {
+  outline: none;
+}
+.form input:focus + .label-name .content-name,
+.form input:valid + .label-name .content-name {
+  transform: translateY(-150%);
+  font-size: 14px;
+  left: 0px;
+  color: #15aabf;
+  letter-spacing: .8px;
+  font-weight: 300;
+}
+.form input:focus + .label-name::after,
+.form input:valid + .label-name::after {
+  transform: translateX(0%);
+}
+
+
+.signup button{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+    font-size: 22px;
+    border: 1px solid;
+    padding: 5px 20px;
+    font-family: "roboto",sans-serif;
+    font-weight: 100;
+    border-radius: 2px;
+    color: #d9480f;
+transition: all .5s;
+cursor: pointer;
+box-shadow: 0 0 24px 4px #d9480f1a;
+
+}
+.signup button:hover{
+    box-shadow: 0 0 24px 4px #d9480f2a;
+
+    transform: scale(1.02);
+}
+
+.signup button svg{
+    /* stroke: #d9480f; */
+    color: inherit;
+    width: 30px;
+    stroke-width: 1px;
+}
+
+#inp-pass{
+    display: none;
+} 
+.noti{
+    position: absolute;
+    top: 20px;
+    width: 200px;
+    border-radius: 8px;
+    background-color: #d0ebff;
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    margin-left: 50%;
+    transform: translate(-50%);
+    box-shadow: 0 0 6px 6px #c5f5fa94;
+    animation: fade-in .5s ease-in;
+}
+.noti h1{
+    font-family: "roboto",sans-serif;
+    font-size: 25px;
+    font-weight: 300;
+    color: #d9480f;
+}
+.noti p {
+    color: #1864ab;
+    font-family: "roboto",sans-serif;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 100;
+}
+
+
+@media (max-width:800px) {
+  .signup {
+    height: 57vh;
+    width: 90vw;
+  }
+  .signup svg{
+    margin-top: 30px;
+  }
+  .signup button{
+    margin-top: 25px;
+  }
+  .signup button svg{
+    margin-top: 0;
+  }
+  .noti{
+    margin-left: 50vw;
+  }
+}

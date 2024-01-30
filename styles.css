@@ -88,7 +88,7 @@ header .search {
   align-items: center;
   padding: 2px 12px;
   padding-left: 3px;
-  /* background-color: #748ffc; */
+  /* background-color: transparent; */
   cursor: pointer;
   margin-right: 15px;
   border-radius: 2px;
@@ -118,7 +118,7 @@ header .search svg {
 }
 @keyframes width_animation_out_mob {
   from {
-    width: 130px;
+    width: 120px;
   }
   to {
     width: 0px;
@@ -127,7 +127,7 @@ header .search svg {
 header .search div {
   padding: 2px;
   padding-bottom: 3px;
-  background-color: white;
+  background-color: transparent;
   border-radius: 2px;
   width: 220px;
   display: flex;
@@ -142,12 +142,17 @@ header .search div input {
   text-align: center;
   font-size: 16px;
   padding: 5px 15px;
+  background-color: transparent;
   border: none;
+  color: white;
   transition: all 1s;
   animation: width_animation_in 0.8s ease-in;
-  border-bottom: 2px solid #91a7ff;
+  border-bottom: 2px solid white;
 }
-
+header .search div input::placeholder {
+  color: #fff;
+  opacity: 1; /* Firefox */
+}
 header .search input:focus {
   outline: none;
 }
@@ -944,8 +949,9 @@ display: block;
   }
   .container {
     height: calc(100vh - 150px);
-    padding-bottom: 50px;
+    padding-bottom: 20px;
     margin-top: -40px;
+    margin-bottom: 60px;
   }
   .mob-opt {
     display: flex !important;
