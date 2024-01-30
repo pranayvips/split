@@ -110,12 +110,17 @@ function add_member(name) {
 
   var valueParagraph = document.createElement("p");
   valueParagraph.classList.add("pranay-mem");
-  valueParagraph.setAttribute("title", "Current Status");
   valueParagraph.textContent = "0.0";
   valueParagraph.setAttribute("id", name + "-mem");
 
   currentValueDiv.appendChild(valueSvg);
   currentValueDiv.appendChild(valueParagraph);
+  currentValueDiv.setAttribute("title", "Current Status")
+  currentValueDiv.addEventListener("click",()=>{
+  showValDiv.style.animationName = "fade_in"
+
+    showValDiv.classList.toggle("show-val-dis")
+  })
 
   // Create the action section
   var actionDiv = document.createElement("div");
@@ -157,6 +162,20 @@ function add_member(name) {
     transaction_update(name);
     page(2);
     document.getElementById("tran-name").textContent = name;
+    let amt = document.getElementById(name+"-mem").textContent
+    document.getElementById("bal-amt").textContent = amt
+    if (parseFloat(amt) > 0){
+      document.getElementById("bal-amt").style.color = "green"
+      document.getElementById("bal-ico").style.color = "green"
+    }
+    else if(parseFloat(amt)==0){
+      document.getElementById("bal-amt").style.color = "#5f3dc3"
+      document.getElementById("bal-ico").style.color = "#5f3dc3"
+    }
+    else{
+      document.getElementById("bal-amt").style.color = "red"
+      document.getElementById("bal-ico").style.color = "red"
+    }
   });
   actionDiv.appendChild(showTransactionsSvg);
 
@@ -185,10 +204,87 @@ function add_member(name) {
   });
   actionDiv.appendChild(deleteUserSvg);
 
+
+  // Create parent div
+var showValDiv = document.createElement("div");
+showValDiv.className = "show-val";
+
+// Create first SVG element
+var svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg1.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+svg1.setAttribute("fill", "none");
+svg1.setAttribute("viewBox", "0 0 24 24");
+svg1.setAttribute("stroke-width", "1.5");
+svg1.setAttribute("stroke", "currentColor");
+
+var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+path1.setAttribute("stroke-linecap", "round");
+path1.setAttribute("stroke-linejoin", "round");
+path1.setAttribute("d", "M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z");
+
+// Append path to svg1
+svg1.appendChild(path1);
+svg1.addEventListener("click",()=>{
+  showValDiv.style.animationName = "fade_out"
+  setTimeout(() => {
+    showValDiv.classList.toggle("show-val-dis")
+  }, 450);
+})
+
+// Append svg1 to showValDiv
+showValDiv.appendChild(svg1);
+
+// Create paragraph element
+var paragraph = document.createElement("p");
+paragraph.setAttribute("align", "center");
+// paragraph.innerHTML = 'In <span>debt</span> of :';
+let spanEle = document.createElement("span")
+spanEle.setAttribute("id",name+"-shw-txt")
+spanEle.appendChild(document.createTextNode("Credit"))
+paragraph.appendChild(spanEle)
+
+// Append paragraph to showValDiv
+showValDiv.appendChild(paragraph);
+
+// Create second div
+var secondDiv = document.createElement("div");
+
+// Create second SVG element
+var svg2 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg2.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+svg2.setAttribute("fill", "none");
+svg2.setAttribute("viewBox", "0 0 24 24");
+svg2.setAttribute("stroke-width", "1.5");
+svg2.setAttribute("stroke", "currentColor");
+
+var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+path2.setAttribute("stroke-linecap", "round");
+path2.setAttribute("stroke-linejoin", "round");
+path2.setAttribute("d", "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z");
+
+// Append path to svg2
+svg2.appendChild(path2);
+
+// Append svg2 to secondDiv
+secondDiv.appendChild(svg2);
+
+// Create paragraph element for the number
+var numberParagraph = document.createElement("p");
+numberParagraph.innerHTML = '0';
+numberParagraph.setAttribute("id",name+"-shw-val")
+
+// Append numberParagraph to secondDiv
+secondDiv.appendChild(numberParagraph);
+
+// Append secondDiv to showValDiv
+showValDiv.appendChild(secondDiv);
+
+
   // Append everything to the container
   container.appendChild(nameDiv);
   container.appendChild(currentValueDiv);
   container.appendChild(actionDiv);
+  container.appendChild(showValDiv)
   container.addEventListener("click", () => {
     // ASK THE PERSON TO SELECT ONE THAT IS TO PAY OR TO SHOW THE DETAILS ABOUT THAT USER
   });
@@ -299,13 +395,27 @@ function update_per_person() {
   let ele;
   for (let i in friends_list) {
     ele = document.getElementById(i + "-mem");
-    ele.textContent = String(friends_list[i]).substring(0, 5);
-    if (parseFloat(friends_list[i]) > 0) {
+    let value = parseFloat(friends_list[i]).toFixed(2)
+    ele.textContent = value;
+    document.getElementById(i+"-shw-val").textContent = value
+    if (value > 0) {
       ele.style.color = "darkgreen";
-    } else if (parseFloat(friends_list[i]) == 0) {
+      ele.parentElement.setAttribute("title","Credit : "+value)
+      ele.parentElement.style.borderColor = "green"
+      ele.previousSibling.style.stroke = "green"
+      document.getElementById(i+"-shw-txt").textContent = "Credit"
+    } else if (value == 0) {
+      ele.parentElement.style.borderColor = "#845ef7"
+      ele.previousSibling.style.stroke = "#845ef7"
       ele.style.color = "grey";
+      document.getElementById(i+"-shw-txt").textContent = "Credit"
+      ele.parentElement.setAttribute("title","Equalwidth_animation_out_mob")
     } else {
+      ele.previousSibling.style.stroke = "red"
+      ele.parentElement.style.borderColor = "red"
       ele.style.color = "red";
+      document.getElementById(i+"-shw-txt").textContent = "Debt"
+      ele.parentElement.setAttribute("title","Debt : "+value)
     }
   }
   reset();
@@ -348,7 +458,6 @@ function create_ele_desc(desc, amt) {
 }
 function transaction_update(name) {
   let data = friends_list_log[name];
-
   for (let i of data) {
     create_ele_desc(i[0], i[1]);
   }
@@ -398,7 +507,6 @@ function page(num) {
     document.getElementsByClassName("payment")[0].style.display = "none";
   }
 }
-
 let search_click = 0;
 document.getElementById("search-ico").addEventListener("click", () => {
   if (!search_click) {
@@ -409,14 +517,23 @@ document.getElementById("search-ico").addEventListener("click", () => {
       "width_animation_in";
     search_click = 1;
   } else {
-    document.getElementById("search").style.animationName =
+    if (screen.width < 700){
+      document.getElementById("search").style.animationName =
+      "width_animation_out_mob";
+    document.getElementById("search").parentElement.style.animationName =
+      "width_animation_out_mob";
+    }
+    else{
+      document.getElementById("search").style.animationName =
       "width_animation_out";
     document.getElementById("search").parentElement.style.animationName =
       "width_animation_out";
+    }
+    
     setTimeout(() => {
       document.getElementById("search").parentElement.style.display = "none";
       search_click = 0;
-    }, 800);
+    }, 700);
   }
 });
 
@@ -519,7 +636,7 @@ document.addEventListener(
   true
 );
 let cal_click = 0;
-cal_ico.addEventListener("click", () => {
+function cal_show_hide(){
   if (!cal_click) {
     cal_click = 1;
     calculator.style.display = "block";
@@ -529,7 +646,13 @@ cal_ico.addEventListener("click", () => {
     document.getElementById("inp-cal").value = "";
     document.getElementById("res-cal").textContent = "Ans = 0";
   }
+}
+cal_ico.addEventListener("click", () => {
+  cal_show_hide()
 });
+document.getElementById("cal-top").addEventListener("click",()=>{
+cal_show_hide()
+})
 
 document.getElementsByClassName("mob-set")[0].addEventListener("click", () => {
   mob_click = 1;

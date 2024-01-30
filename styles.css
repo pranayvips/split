@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Single+Day&family=Indie+Flower&family=Permanent+Marker&family=Rubik:wght@300;400;500;600&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  user-select: none;
 }
 :root {
   /* heading-font: ; */
@@ -39,7 +41,7 @@ header .left .sidebar-logo svg {
   margin-left: 15px;
   margin-top: 5px;
   transition: all 0.5s;
-  stroke: darkcyan;
+  stroke: white;
   cursor: pointer;
 }
 header .left .sidebar-logo svg:hover {
@@ -48,12 +50,10 @@ header .left .sidebar-logo svg:hover {
 }
 header .left .logo {
   display: flex;
-  align-items: center;
   column-gap: 10px;
   padding: 5px 20px;
   border-radius: 8px;
-  background-color: #dbe4ff;
-
+  background-color: #e5dbff;
   cursor: pointer;
   margin: 10px 20px;
   padding-left: 15px;
@@ -69,12 +69,14 @@ header .left .logo img {
   /* box-shadow: 0 0 10px rgba(76, 145, 250); */
 }
 header .left .logo p {
-  font-size: 14px;
+  font-size: 19px;
   color: rgb(76, 145, 250);
+  letter-spacing: 2px;
+  margin-top: 2px;
   letter-spacing: 1px;
   /* text-shadow: 1px 1px 12px rgba(76, 145, 250); */
   font-weight: 600;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Indie Flower", sans-serif;
 }
 header .right {
   display: flex;
@@ -86,7 +88,7 @@ header .search {
   align-items: center;
   padding: 2px 12px;
   padding-left: 3px;
-  background-color: #748ffc;
+  /* background-color: #748ffc; */
   cursor: pointer;
   margin-right: 15px;
   border-radius: 2px;
@@ -114,10 +116,19 @@ header .search svg {
     width: 0px;
   }
 }
+@keyframes width_animation_out_mob {
+  from {
+    width: 130px;
+  }
+  to {
+    width: 0px;
+  }
+}
 header .search div {
   padding: 2px;
   padding-bottom: 3px;
   background-color: white;
+  border-radius: 2px;
   width: 220px;
   display: flex;
   justify-content: center;
@@ -140,6 +151,13 @@ header .search div input {
 header .search input:focus {
   outline: none;
 }
+header #cal-top{
+  width: 25px;
+  stroke: white;
+  margin-right: 10px;
+  display: none;
+}
+
 .container {
   overflow-y: auto;
   height: calc(100vh - 70px);
@@ -173,32 +191,38 @@ header .search input:focus {
 
 #name-input {
   outline: none;
-  border: 1px solid black;
+  border: 1px solid #364fc7;
   padding: 10px 30px;
+  font-family: "Single Day",sans-serif;
+  color: #0b7285;
   border-radius: 8px;
   width: 50%;
   font-size: 20px;
   background-color: #edf2ff;
   letter-spacing: 0.5px;
+font-weight: 300;
 }
-#name-input:focus {
+#name-input:focus{
   outline: none;
+  font-weight: 400;
   border: 1px solid dodgerblue;
-  animation: width_animation_in 0.5s ease-in;
+  animation: width_animation_in 0.3s ease-in;
 }
 .member-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   column-gap: 20px;
+  animation: fade_in .7s ease-in;
   margin: 5%;
   row-gap: 20px;
   border-radius: 8px;
   background-color: #e7f5ff;
   padding: 30px 50px;
   width: 90%;
-  padding-top: 85px;
+  padding-top: 100px;
   position: relative;
   overflow-x: auto;
+  box-shadow: 0 0 12px 6px #bac8ff80;
   transition: all 0.5s;
 }
 .member-container.container::-webkit-scrollbar {
@@ -206,12 +230,31 @@ header .search input:focus {
 }
 .member-container:hover {
   transform: scale(1.003);
-  box-shadow: 0 0 10px 4px e7f5ff;
+  box-shadow: 0 0 18px 12px #bac8ff80;
 }
 .member-container h1 {
   position: absolute;
+  font-weight: 400;
   top: 20px;
+  display: flex;
   left: 5%;
+  font-family: "Permanent Marker",sans-serif;
+  color: #5f3dc4;
+  /* align-items: center; */
+  column-gap: 20px;
+  padding: 0 20px;
+  border-radius: 4px;
+  border-bottom: 3px solid;
+}
+.member-container h1 svg{
+  width: 30px;
+  padding: 5px;
+  stroke-width: 2.5px;
+  margin-bottom: 10px;
+  box-sizing: content-box;
+  border: 3px solid;
+  border-radius: 50%;
+  margin-top: 0;
 }
 @keyframes fade_in {
   from {
@@ -231,13 +274,14 @@ header .search input:focus {
   border-radius: 8px;
   display: grid;
   justify-content: center;
+  position: relative;
   cursor: pointer;
   transition: all 0.5s;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px #364fc7;
   animation: fade_in 0.8s linear;
 }
 .member-container .member:hover {
-  box-shadow: 0 0 5px #99e9f2;
+  transform: scale(1.02);
 }
 
 .member-container .member svg {
@@ -249,21 +293,49 @@ header .search input:focus {
   column-gap: 10px;
 }
 .member-container .member .name {
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid #6741d9;
   padding: 2px 15px;
   font-size: 18px;
   padding-bottom: 6px;
-  font-weight: 600;
-  margin: 10px 0;
+  font-weight: 500;
+  color: #6741d9;
+  margin: 10px 5px;
+  justify-content:space-evenly;
   margin-bottom: 20px;
+}
+.member-container .member .name p{
+  font-family: "Single Day",sans-serif;
+  font-weight: 500;
 }
 .member-container .member .current-value {
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid #845ef7;
   justify-self: center;
   padding: 5px 10px;
+  color: #845ef7;
   transition: all 0.5s;
   border-radius: 10px;
+  width: 50%;
+  overflow-y: hidden;
+}
+.member-container .member .current-value:hover{
+  transform: scale(1.1);
+  box-shadow: 0 0 4px #845ef77d;
+}
+.member-container .member .current-value p{
+  width: 60%;
+  
+  margin-top: 2px;
+  font-size: 13px;
+  overflow-x: auto;
+}
+.member-container .member .current-value p::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.member-container .member .current-value svg{
+  width: 25px;
 }
 .member-container .member .current-value:hover {
   background-color: rgba(255, 255, 255, 0.2);
@@ -278,12 +350,39 @@ header .search input:focus {
   box-sizing: content-box;
   padding: 5px;
   border-radius: 4px;
+  color: #1864ab;
   background-color: #dbe4ff;
   border: 0.1px solid rgba(0, 0, 0, 0.15);
   transition: all 0.3s;
 }
 .member-container .member .action svg:hover {
   transform: scale(1.2);
+}
+@keyframes fade_out {
+  to{opacity: 0;}
+}
+.member-container .member .show-val {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  display: grid;
+  display: none;
+  padding: 2% 10%;
+  animation: fade_in .2s ease-in;
+}
+.member-container .member .show-val-dis{
+  display: grid;
+}
+.member-container .member .show-val div{
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid black; */
+  padding: 2% 0;
+  border-radius: 4px;
+  row-gap: 20px;
 }
 
 .container .screen {
@@ -297,13 +396,17 @@ header .search input:focus {
 .container .screen .add-friend {
   width: 90%;
   background-color: #e7f5ff;
-  border-radius: 25px;
+  border-radius: 12px;
+  animation: fade_in .2s ease-in;
   padding: 2% 5%;
+  color: #5c7cfa;
   transition: all 0.5s;
+  box-shadow: 0 0 12px 6px #bac8ff80;
+
 }
 .container .screen .add-friend:hover {
   transform: scale(1.003);
-  box-shadow: 0 0 10px 4px e7f5ff;
+    box-shadow: 0 0 18px 12px #bac8ff80;
 }
 .container .screen .add-friend div {
   display: flex;
@@ -312,8 +415,8 @@ header .search input:focus {
 }
 .container .screen .add-friend div svg {
   width: 30px;
-  stroke: darkgreen;
-  border: 1px solid darkgreen;
+  stroke: #4dabf7;
+  border: 1px solid #364fc7;
   cursor: pointer;
   box-sizing: content-box;
   padding: 0 8px;
@@ -322,9 +425,37 @@ header .search input:focus {
 }
 .container .screen .add-friend div svg:hover {
   stroke: #e7f5ff;
-  background-color: darkgreen;
+  background-color: #20c997;
 }
-.container .screen .add-friend h1 {
+
+.container .screen .add-friend div svg:active{
+  stroke: green;
+  background-color: #e7f5ff;
+}
+
+.container .screen .add-friend h1{
+  font-weight: 400;
+  display: inline-flex;
+  font-family: "Permanent Marker";
+  color: #5f3dc4;
+  column-gap: 15px;
+  align-items: center;
+}
+.container .screen .add-friend h1 svg{
+  width: 25px;
+  box-sizing: content-box;
+  stroke-width: 3px;
+}
+
+
+.container .screen .add-friend p {
+  color: #5f3dc4;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: "Indie Flower", sans-serif;
+  line-height: 18px;
+  letter-spacing: 1px;
+  margin-top: 20px;
 }
 
 .payment {
@@ -339,21 +470,43 @@ header .search input:focus {
   background-color: #e7f5ff;
   padding: 30px 50px;
   position: relative;
-  padding-top: 220px;
+  padding-top: 250px;
   display: none;
+  animation: fade_in .2s ease-in;
   transition: all 0.5s;
+  box-shadow: 0 0 12px 6px #bac8ff80;
+}
+.payment:hover{
+  box-shadow: 0 0 18px 12px #bac8ff80;
 }
 .payment h2 {
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 15px;
+  top: 15px;
+  color: #5f3dc4;
+  border-radius: 4px;
+  padding: 10px 15px;
   font-size: 14px;
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 400;
+  /* font-family: "Courier New", Courier, monospace; */
+  font-weight: 500;
+  transition: all .5s;
+  border: 1px solid;
+  z-index: 10;
+}
+.payment h2:hover{
+  background-color: #5f3dc4df;
+  color: white;
 }
 .payment h1 {
   margin-top: 20px;
+  color: #5f3dc4;
+  font-family: "Permanent Marker",sans-serif;
+  letter-spacing: 1.5px;
+  border-bottom: 3px solid;
+  font-weight: 500;
+  border-radius: 5px;
   text-align: center;
+  margin-top: 30px;
 }
 .payment .get-pay {
   position: absolute;
@@ -363,11 +516,13 @@ header .search input:focus {
 }
 .payment .get-pay h3 {
   text-align: center;
+  color: #5f3dc4;
   font-size: 25px;
+  font-family: "Permanent Marker",sans-serif;
   margin: 15px 0;
   margin-top: 25px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-weight: 400;
+  margin-bottom: 20px;
 }
 .payment #back {
   position: absolute;
@@ -380,16 +535,22 @@ header .search input:focus {
   cursor: pointer;
 }
 .payment #back svg {
-  color: black;
+  color: #5f3dc4;
+  stroke-width: 5px;
   width: 25px;
+  transition: all .5s;
+}
+.payment #back svg:hover{
+  transform: scale(1.1);
 }
 .payment .get-pay .input {
   display: flex;
-  border: 1px solid black;
-  background-color: #edf2ff;
+  border: 1px solid #5f3dc4;
+  background-color: #e3fafc;
   align-items: center;
   width: 350px;
   padding: 10px 20px;
+  color: #5f3dc4;
   font-size: 18px;
   /* justify-content: space-between; */
   border-radius: 8px;
@@ -398,6 +559,7 @@ header .search input:focus {
   background-color: transparent;
   outline: none;
   border: none;
+  color: #5f3dc4;
   width: 100px;
   text-align: center;
   letter-spacing: 1px;
@@ -439,16 +601,19 @@ header .search input:focus {
   border-radius: 8px;
   display: flex;
   justify-content: center;
+  font-style: italic;
   cursor: pointer;
   transition: transform 0.5s;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px #5f3dc471;
 }
 .payment .member:hover {
   transform: scale(0.9);
 }
 .payment .member-clicked {
-  background-color: lightgreen;
+  background-color: #38d9a9;
   transform: scale(0.95);
+  color: #5f3dc4;
+  font-weight: 500;
 }
 
 .payment .member p {
@@ -469,31 +634,80 @@ header .search input:focus {
   display: none;
   position: relative;
   padding-bottom: 30px;
+  transition: all .5s;
+  animation: fade_in .2s ease-in;
+box-shadow: 0 0 12px 6px #bac8ff80;
+
 }
+.transaction:hover {
+  transform: scale(1.003);
+    box-shadow: 0 0 18px 12px #bac8ff80;
+  }
+
 .transaction h1 {
   text-align: center;
   margin-bottom: 25px;
+  color: #5f3dc4;
+font-family: "Permanent Marker";
+font-weight: 500;
+
+display: inline-flex;
+column-gap: 20px;
+border-bottom: 3px solid;
+padding: 0 20px;
+border-radius: 4px;
+margin: 0 auto;
+margin-bottom: 30px;
+}
+.transaction h1 svg{
+  width: 35px;
+  margin-left: 30px;
 }
 .transaction table {
-  border: 2px solid black;
+  border: 2px solid #5f3dc4;
   border-radius: 8px;
   width: 100%;
+  color: #5f3dc4;
 }
 .transaction table th {
   padding: 15px 20px;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #5f3dc4;
+  font-weight: 500;
+  font-family: "Permanent Marker", sans-serif;
 }
 .transaction table th:first-child {
-  border-right: 2px solid black;
+  border-right: 2px solid #5f3dc4;
 }
 .transaction table tr {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #5f3dc4;
 }
 .transaction table td {
-  border-left: 2px solid #000;
-  border-right: 2px solid #000;
+  border-left: 2px solid #5f3dc4;
+  border-right: 2px solid #5f3dc4;
   padding: 5px;
   text-align: center;
+}
+.transaction .balance{
+  display: flex;
+column-gap: 15px;
+margin: 0 auto;
+padding: 1% 3%;
+
+margin-top: 50px;
+color: #5f3dc4;
+align-items: center;
+transition: all .5s;
+}
+
+.transaction .balance p{
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  font-family: "Permanent Marker",sans-serif;
+}
+.transaction .balance svg{
+  width: 35px;
+  margin-left: 20px;
 }
 .transaction .red {
   color: red;
@@ -515,7 +729,16 @@ header .search input:focus {
   left: 25px;
   width: 25px;
   cursor: pointer;
-}
+
+    color: #5f3dc4;
+    stroke-width: 5px;
+    width: 25px;
+    transition: all .5s;
+  }
+  .transaction #trans-back:hover{
+    transform: scale(1.1);
+  }
+
 @keyframes sidebar_width {
   from {
     margin-left: -18%;
@@ -549,10 +772,10 @@ header .search input:focus {
   top: 70px;
   z-index: 10;
   border-top-right-radius: 12px;
-  box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 6px 6px #5f3dc437;
   border-bottom-right-radius: 12px;
   display: none;
-  animation: sidebar_width 0.5s ease-in;
+  animation: sidebar_width 0.4s ease-in;
 }
 .sidebar .tab {
   display: flex;
@@ -565,23 +788,30 @@ header .search input:focus {
   width: 90%;
   display: flex;
   cursor: pointer;
+  color: #4c6ef5;
   padding: 4% 10%;
   align-items: center;
   column-gap: 20px;
   border-radius: 8px;
+  transition: all .2s;
   margin-bottom: 20px;
 }
 .sidebar .tab div:hover {
   background-color: #e4e9fa;
+  box-shadow: 0 0 4px ;
 }
 .sidebar .tab div svg {
   width: 30px;
+}
+.sidebar .tab div h3{
+  font-weight: 400;
 }
 
 .sidebar .newuser {
   display: flex;
   padding: 10px;
   column-gap: 10px;
+  color: #1971c2;
   align-items: center;
   margin-bottom: 20px;
   position: relative;
@@ -590,6 +820,7 @@ header .search input:focus {
 
 .sidebar .newuser svg {
   width: 90px;
+  stroke-width: 2px;
 }
 .sidebar .newuser div {
   display: flex;
@@ -602,10 +833,11 @@ header .search input:focus {
   font-size: 10px;
   letter-spacing: 0.8px;
   font-weight: 600;
-  color: rgb(110, 109, 109);
+  color: #339af0;
 }
 .sidebar .newuser div p {
-  font-size: 14px;
+  
+  font-size: 13px;
 }
 
 .sidebar .bottom {
@@ -618,7 +850,7 @@ header .search input:focus {
 .sidebar hr {
   outline: none;
   border: none;
-  border-top: 1px solid #868e96;
+  border-top: 1px solid #1971c2;
   width: 90%;
   margin-left: 3%;
   position: absolute;
@@ -639,6 +871,7 @@ header .search input:focus {
     display: grid;
     width: 100%;
     height: 100%;
+    padding-top: 0;
     transform: translate(0, 10%);
   }
   .payment {
@@ -662,17 +895,22 @@ header .search input:focus {
   header .left .logo {
     margin-left: 10px;
   }
+header #cal-top{
+
+display: block;
+}
   .container .screen {
     margin-top: 0;
   }
   .member-container {
-    padding-top: 80px;
+    padding-top: 100px;
   }
   #cal-ico {
     top: -10px;
+    display: none;
   }
   .payment .get-pay #send {
-    top: 200px;
+    top: 220px;
   }
   .notification {
     margin-left: 15% !important;
@@ -692,11 +930,22 @@ header .search input:focus {
     width: 80%;
     margin: 0 auto;
   }
+  .payment .get-pay h1{
+    margin: 0 20px;
+    border: none;
+    margin-top: 30px;
+  }
+  .payment h2{
+    padding: 0;
+    border: none;
+  }
+  .payment .get-pay h3{
+    margin-top: 10px;
+  }
   .container {
     height: calc(100vh - 150px);
     padding-bottom: 50px;
     margin-top: -40px;
-    padding-top: 50px;
   }
   .mob-opt {
     display: flex !important;
@@ -725,6 +974,13 @@ header .search input:focus {
   header .search div input {
     width: 120px;
   }
+  .transaction h1 svg{
+    display: none;
+  }
+  .transaction h1{
+    border-bottom: none;
+
+  }
 }
 
 .mob-opt {
@@ -737,6 +993,7 @@ header .search input:focus {
   justify-content: space-around;
   display: none;
   padding-top: 8px;
+  font-family: "Indie Flower", sans-serif;
 }
 .mob-opt div {
   display: flex;
@@ -830,7 +1087,7 @@ header .search input:focus {
   top: 20px;
   margin-left: 48%;
   border-radius: 8px;
-  background-color: #fff5f5;
+  background-color: #f8f0fc;
   width: 250px;
   display: none;
   flex-direction: column;
