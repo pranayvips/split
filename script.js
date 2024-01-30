@@ -8,8 +8,8 @@ function update_set_data() {
   if (LOGED_IN) {
     let name = JSON.stringify(friends_list);
     let data = JSON.stringify(friends_list_log);
-      localStorage.setItem("name", name);
-      localStorage.setItem("data", data);
+    localStorage.setItem("name", name);
+    localStorage.setItem("data", data);
   }
 }
 
@@ -339,9 +339,11 @@ function sidebar_do() {
   if (sidebar_click == 0) {
     document.getElementsByClassName("sidebar")[0].style.display = "block";
     document.getElementsByClassName("screen")[0].style.paddingLeft = "18%";
+    document.documentElement.style.setProperty('--sidebar-pad', '18%');
     sidebar_click = 1;
   } else {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
+    document.documentElement.style.setProperty('--sidebar-pad', '0%');
     document.getElementsByClassName("screen")[0].style.paddingLeft = "0";
     sidebar_click = 0;
   }
@@ -394,7 +396,7 @@ function calculations() {
   let per_person = payment_input.value / selected_count;
   let list_of_person = document.getElementsByClassName("member-clicked");
   let if_there = 0;
-  friends_list_log[selected_person].push(["Spent ", payment_input.value]);
+  friends_list_log[selected_person].push(["Invested ", payment_input.value]);
   for (let i = 0; i < list_of_person.length; i++) {
     friends_list[list_of_person[i].getAttribute("title")] =
       parseFloat(friends_list[list_of_person[i].getAttribute("title")]) -
@@ -717,13 +719,15 @@ document.getElementsByClassName("mob-home")[0].addEventListener("click", () => {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
 });
-
-document.getElementsByClassName("logo")[0].addEventListener("click", () => {
+function remove_sidebar(){
   document.getElementsByClassName("sidebar")[0].style.animationName =
     "sidebar_width_mob_1";
   setTimeout(() => {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
+}
+document.getElementsByClassName("logo")[0].addEventListener("click", () => {
+  remove_sidebar()
 });
 
 try {
@@ -732,9 +736,249 @@ try {
   });
 } catch {}
 
-let sidebar_tab = document.getElementsByClassName("in-tab");
+let sidebar_tab = document.getElementsByClassName("tab");
 for (let i of sidebar_tab) {
   i.addEventListener("click", () => {
-    show_notification("Hang On!!", "This feature will be added soon...");
+    if(screen.width < 800){
+      remove_sidebar()
+    }
   });
 }
+
+let home_screen = document.getElementsByClassName("screen")[0];
+let home_click = false
+let about_screen = document.getElementsByClassName("screen-about")[0];
+let about_click = false
+let rating_screen = document.getElementsByClassName("rating")[0];
+let rating_click = false
+let help_screen = document.getElementsByClassName("help-screen")[0]
+let help_click = false
+let spents_screen = document.getElementsByClassName("spents")[0]
+let spents_click = false
+function all_func_dis() {
+  home_screen.style.display = "none";
+  about_screen.style.display = "none";
+  rating_screen.style.display = "none";
+  help_screen.style.display = "none";
+  spents_screen.style.display = "none";
+}
+function all_func_click_dis(){
+  rating_click=false
+  about_click=false
+  help_click = false
+  spents_click =false
+}
+document.getElementsByClassName("helper")[0].addEventListener("click", () => {
+  all_func_dis();
+  if (help_click) {
+    help_screen.style.animationName = "fade_out";
+    home_screen.style.display = "flex";
+    setTimeout(() => {
+      help_screen.style.display = "none";
+    }, 450);
+    help_click=false
+  }
+  else{
+    help_screen.style.display = "flex";
+    help_screen.style.animationName = "fade_in";
+    all_func_click_dis()
+    help_click=true
+  }
+});
+
+document.getElementsByClassName("everyone")[0].addEventListener("click", () => {
+  all_func_dis();
+  if (spents_click) {
+    spents_screen.style.animationName = "fade_out";
+    home_screen.style.display = "flex";
+    setTimeout(() => {
+      spents_screen.style.display = "none";
+    }, 450);
+    spents_click=false
+  }
+  else{
+    spents_screen.style.display = "block";
+    spents_screen.style.animationName = "fade_in";
+    all_func_click_dis()
+    spents_click=true
+  }
+});
+document
+  .getElementsByClassName("spents-back")[0]
+  .addEventListener("click", () => {
+    all_func_click_dis()
+    spents_screen.style.animationName = "fade_out";
+    setTimeout(() => {
+      home_screen.style.display = "flex";
+      spents_screen.style.display = "none";
+    }, 450);
+  });
+
+
+document.getElementsByClassName("about")[0].addEventListener("click", () => {
+  all_func_dis();
+  if (about_click) {
+    about_screen.style.animationName = "fade_out";
+    home_screen.style.display = "flex";
+    setTimeout(() => {
+      about_screen.style.display = "none";
+    }, 450);
+    about_click=false
+  }
+  else{
+    about_screen.style.display = "flex";
+    about_screen.style.animationName = "fade_in";
+    all_func_click_dis()
+    about_click=true
+  }
+});
+
+document
+  .getElementsByClassName("scr-abt-back")[0]
+  .addEventListener("click", () => {
+    all_func_click_dis()
+    about_screen.style.animationName = "fade_out";
+    setTimeout(() => {
+      home_screen.style.display = "flex";
+      about_screen.classList.toggle("screen-about-show");
+    }, 450);
+  });
+
+document.getElementsByClassName("feedback")[0].addEventListener("click", () => {
+  all_func_dis();
+  if (rating_click) {
+    rating_screen.style.animationName = "fade_out";
+    home_screen.style.display = "flex";
+    setTimeout(() => {
+      rating_screen.style.display = "none";
+    }, 450);
+    rating_click=false
+  }
+  else{
+    rating_screen.style.display = "flex";
+    rating_screen.style.animationName = "fade_in";
+    all_func_click_dis()
+    rating_click=true
+  }
+});
+
+document
+  .getElementsByClassName("rating-back")[0]
+  .addEventListener("click", () => {
+    rating_screen.style.animationName = "fade_out";
+    all_func_click_dis()
+    setTimeout(() => {
+      home_screen.style.display = "flex";
+      rating_screen.style.display = "none";
+    }, 450);
+  });
+
+  document
+  .getElementsByClassName("question-bk")[0]
+  .addEventListener("click", () => {
+    help_screen.style.animationName = "fade_out";
+    all_func_click_dis()
+    setTimeout(() => {
+      home_screen.style.display = "flex";
+      help_screen.style.display = "none";
+    }, 450);
+  });
+
+// Select all elements with the "i" tag and store them in a NodeList called "stars"
+const stars = document.querySelectorAll(".stars i");
+
+// Loop through the "stars" NodeList
+stars.forEach((star, index1) => {
+  // Add an event listener that runs a function when the "click" event is triggered
+  star.addEventListener("click", () => {
+    // Loop through the "stars" NodeList Again
+    stars.forEach((star, index2) => {
+      // Add the "active" class to the clicked star and any stars with a lower index
+      // and remove the "active" class from any stars with a higher index
+      index1 >= index2
+        ? star.classList.add("active")
+        : star.classList.remove("active");
+    });
+  });
+});
+
+
+
+let all_head = document.getElementsByClassName("ques-head")
+for (let i of all_head){
+  i.addEventListener("click",()=>{
+    document.getElementById(i.getAttribute("for")).classList.toggle("part-show")
+  })
+}
+
+
+let spent_content = document.getElementsByClassName("spent-content")[0]
+function createSVG_spent() {
+  const svgNS = "http://www.w3.org/2000/svg";
+  
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("xmlns", svgNS);
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("stroke-width", "1.5");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("class", "w-6 h-6");
+
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  path.setAttribute("d", "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z");
+
+  svg.appendChild(path);
+
+  return svg;
+}
+function spent_tab_creation(name,bal,data){
+  // <div>
+  //         <h1>Pranay <span>balacne 12</span></h1>
+  //         <ul>
+  //           <li>transaction 1</li>
+  //           <li>transaction 2</li>
+  //         </ul>
+  //       </div>
+  let div = document.createElement("div")
+  let h1 = document.createElement("h1")
+  h1.textContent = name
+  let span = document.createElement("span")
+  span.textContent = bal
+  h1.appendChild(span)
+  let ul = document.createElement("ul")
+  function create_li(data){
+    let li = document.createElement("li")
+    li.innerHTML = data[0]
+    let spn= document.createElement("span")
+    spn.appendChild(createSVG_spent())
+    spn.innerHTML += data[1]
+    if(parseFloat(data[1])>=0){
+      spn.style.color = "green"
+    }
+    else{
+      spn.style.color = "red"
+    }
+    li.appendChild(spn)
+    ul.appendChild(li)
+  }
+  for (let i of data){
+    create_li(i)
+  }
+  div.appendChild(h1)
+  div.appendChild(ul)
+  spent_content.appendChild(div)
+}
+function create_tab_load(){
+  let newDiv = document.createElement("div")
+  newDiv.setAttribute("class","spent-content")
+  spent_content.parentElement.appendChild(newDiv)
+  spent_content.remove()
+  spent_content = newDiv
+  for (let i in friends_list_log){
+    spent_tab_creation(i,friends_list[i],friends_list_log[i])
+  }
+}
+
+create_tab_load()

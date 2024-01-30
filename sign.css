@@ -212,6 +212,7 @@ box-shadow: 0 0 24px 4px #d9480f1a;
   }
   .signup button{
     margin-top: 25px;
+    margin-bottom: 15px;
   }
   .signup button svg{
     margin-top: 0;
