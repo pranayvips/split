@@ -118,7 +118,6 @@ function add_member(name) {
   currentValueDiv.setAttribute("title", "Current Status")
   currentValueDiv.addEventListener("click",()=>{
   showValDiv.style.animationName = "fade_in"
-
     showValDiv.classList.toggle("show-val-dis")
   })
 
@@ -228,7 +227,7 @@ svg1.addEventListener("click",()=>{
   showValDiv.style.animationName = "fade_out"
   setTimeout(() => {
     showValDiv.classList.toggle("show-val-dis")
-  }, 450);
+  }, 150);
 })
 
 // Append svg1 to showValDiv
@@ -290,6 +289,12 @@ showValDiv.appendChild(secondDiv);
   });
   member_container.appendChild(container);
 }
+
+
+
+
+
+
 
 let sidebar_click = 0;
 function sidebar_do() {
