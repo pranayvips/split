@@ -405,6 +405,9 @@ function update_selected_count() {
 
 function calculations() {
   let payment_value = payment_input.value;
+  if (payment_value.length > 10){
+    show_notification("Kyu Vro","This app is not made for too much rich peoples")
+  }
   let per_person = payment_value / selected_count;
   let list_of_person = document.getElementsByClassName("member-clicked");
   let if_there = 0;
