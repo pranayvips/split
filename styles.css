@@ -415,6 +415,7 @@ header #cal-top {
   border-radius: 12px;
   margin-bottom: 60px;
   box-sizing: content-box;
+  animation: fade_in .4s linear;
   position: relative;
   padding-top: 130px;
 }

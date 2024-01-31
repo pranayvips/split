@@ -550,18 +550,18 @@ document.getElementById("trans-back").addEventListener("click", () => {
 
 function page(num) {
   if (num == 0) {
-    document.getElementsByClassName("member-container")[0].style.display =
-      "none";
+    member_container.style.display ="none";
     document.getElementsByClassName("add-friend")[0].style.display = "none";
+    document.getElementsByClassName("act")[0].style.display = "none";
     document.getElementsByClassName("payment")[0].style.display = "grid";
   } else if (num == 2) {
     document.getElementsByClassName("transaction")[0].style.display = "flex";
-    document.getElementsByClassName("member-container")[0].style.display =
-      "none";
+    member_container.style.display ="none";
+    document.getElementsByClassName("act")[0].style.display = "none";
     document.getElementsByClassName("add-friend")[0].style.display = "none";
   } else {
-    document.getElementsByClassName("member-container")[0].style.display =
-      "grid";
+    document.getElementsByClassName("act")[0].style.display = "grid";
+    member_container.style.display ="grid";
     document.getElementsByClassName("add-friend")[0].style.display = "block";
     document.getElementsByClassName("transaction")[0].style.display = "none";
     document.getElementsByClassName("payment")[0].style.display = "none";
