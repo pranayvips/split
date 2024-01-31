@@ -15,7 +15,6 @@ function update_set_data() {
 
 var friends_list = {};
 var friends_list_log = {};
-
 function check_log_in() {
   let datas = localStorage.getItem("user");
   if (datas) {
@@ -25,6 +24,7 @@ function check_log_in() {
       "log-ele"
     )[1].innerHTML = `<span class="log-ele">Signed In </span><br />:)`;
     document.getElementsByClassName("signup")[0].remove();
+    document.getElementsByClassName("del-sign")[0].style.display = "flex";
     LOGED_IN = 1;
     if (localStorage.getItem("name")) {
       friends_list = JSON.parse(localStorage.getItem("name"));
@@ -36,6 +36,11 @@ function check_log_in() {
       }
       update_per_person(1);
     }
+  } else {
+    show_notification(
+      "Not Signed In",
+      "Your data will not be saved. Sign up to use this feature"
+    );
   }
 }
 check_log_in();
@@ -233,13 +238,19 @@ function add_member(name = "") {
     "Delete User"
   );
   deleteUserSvg.addEventListener("click", () => {
-    if (confirm("Are you sure to delete user " + name + " ?")) {
-      delete friends_list[name];
-      delete friends_list_log[name];
-      update_set_data();
-      container.remove();
-      document.getElementsByClassName(name + "-pay")[0].remove();
-    }
+    confirm_box(
+      "Delete User",
+      "Are you sure to delete user " + name + " ?",
+      () => {
+        try {
+          delete friends_list[name];
+          delete friends_list_log[name];
+          update_set_data();
+          container.remove();
+          document.getElementsByClassName(name + "-pay")[0].remove();
+        } catch (error) {}
+      }
+    );
   });
   actionDiv.appendChild(deleteUserSvg);
 
@@ -339,11 +350,11 @@ function sidebar_do() {
   if (sidebar_click == 0) {
     document.getElementsByClassName("sidebar")[0].style.display = "block";
     document.getElementsByClassName("screen")[0].style.paddingLeft = "18%";
-    document.documentElement.style.setProperty('--sidebar-pad', '18%');
+    document.documentElement.style.setProperty("--sidebar-pad", "18%");
     sidebar_click = 1;
   } else {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
-    document.documentElement.style.setProperty('--sidebar-pad', '0%');
+    document.documentElement.style.setProperty("--sidebar-pad", "0%");
     document.getElementsByClassName("screen")[0].style.paddingLeft = "0";
     sidebar_click = 0;
   }
@@ -393,10 +404,11 @@ function update_selected_count() {
 }
 
 function calculations() {
-  let per_person = payment_input.value / selected_count;
+  let payment_value = payment_input.value;
+  let per_person = payment_value / selected_count;
   let list_of_person = document.getElementsByClassName("member-clicked");
   let if_there = 0;
-  friends_list_log[selected_person].push(["Invested ", payment_input.value]);
+  friends_list_log[selected_person].push(["Invested ", payment_value]);
   for (let i = 0; i < list_of_person.length; i++) {
     friends_list[list_of_person[i].getAttribute("title")] =
       parseFloat(friends_list[list_of_person[i].getAttribute("title")]) -
@@ -405,7 +417,7 @@ function calculations() {
       'Recieved from "' +
         selected_person +
         '" <br > On total transaction of ' +
-        payment_input.value,
+        payment_value,
       -per_person,
     ]);
     if (list_of_person[i].getAttribute("title") == selected_person) {
@@ -418,7 +430,7 @@ function calculations() {
   }
 
   friends_list[selected_person] =
-    parseFloat(friends_list[selected_person]) + parseFloat(payment_input.value);
+    parseFloat(friends_list[selected_person]) + parseFloat(payment_value);
   payment_input.value = "";
   update_per_person();
 }
@@ -715,11 +727,14 @@ document.getElementsByClassName("mob-set")[0].addEventListener("click", () => {
 document.getElementsByClassName("mob-home")[0].addEventListener("click", () => {
   document.getElementsByClassName("sidebar")[0].style.animationName =
     "sidebar_width_mob_1";
+  all_func_dis();
+  all_func_click_dis();
+  home_screen.style.display = "flex";
   setTimeout(() => {
     document.getElementsByClassName("sidebar")[0].style.display = "none";
   }, 450);
 });
-function remove_sidebar(){
+function remove_sidebar() {
   document.getElementsByClassName("sidebar")[0].style.animationName =
     "sidebar_width_mob_1";
   setTimeout(() => {
@@ -727,7 +742,7 @@ function remove_sidebar(){
   }, 450);
 }
 document.getElementsByClassName("logo")[0].addEventListener("click", () => {
-  remove_sidebar()
+  remove_sidebar();
 });
 
 try {
@@ -739,22 +754,22 @@ try {
 let sidebar_tab = document.getElementsByClassName("tab");
 for (let i of sidebar_tab) {
   i.addEventListener("click", () => {
-    if(screen.width < 800){
-      remove_sidebar()
+    if (screen.width < 800) {
+      remove_sidebar();
     }
   });
 }
 
 let home_screen = document.getElementsByClassName("screen")[0];
-let home_click = false
+let home_click = false;
 let about_screen = document.getElementsByClassName("screen-about")[0];
-let about_click = false
+let about_click = false;
 let rating_screen = document.getElementsByClassName("rating")[0];
-let rating_click = false
-let help_screen = document.getElementsByClassName("help-screen")[0]
-let help_click = false
-let spents_screen = document.getElementsByClassName("spents")[0]
-let spents_click = false
+let rating_click = false;
+let help_screen = document.getElementsByClassName("help-screen")[0];
+let help_click = false;
+let spents_screen = document.getElementsByClassName("spents")[0];
+let spents_click = false;
 function all_func_dis() {
   home_screen.style.display = "none";
   about_screen.style.display = "none";
@@ -762,11 +777,11 @@ function all_func_dis() {
   help_screen.style.display = "none";
   spents_screen.style.display = "none";
 }
-function all_func_click_dis(){
-  rating_click=false
-  about_click=false
-  help_click = false
-  spents_click =false
+function all_func_click_dis() {
+  rating_click = false;
+  about_click = false;
+  help_click = false;
+  spents_click = false;
 }
 document.getElementsByClassName("helper")[0].addEventListener("click", () => {
   all_func_dis();
@@ -776,13 +791,12 @@ document.getElementsByClassName("helper")[0].addEventListener("click", () => {
     setTimeout(() => {
       help_screen.style.display = "none";
     }, 450);
-    help_click=false
-  }
-  else{
+    help_click = false;
+  } else {
     help_screen.style.display = "flex";
     help_screen.style.animationName = "fade_in";
-    all_func_click_dis()
-    help_click=true
+    all_func_click_dis();
+    help_click = true;
   }
 });
 
@@ -794,26 +808,25 @@ document.getElementsByClassName("everyone")[0].addEventListener("click", () => {
     setTimeout(() => {
       spents_screen.style.display = "none";
     }, 450);
-    spents_click=false
-  }
-  else{
+    spents_click = false;
+  } else {
+    create_tab_load();
     spents_screen.style.display = "block";
     spents_screen.style.animationName = "fade_in";
-    all_func_click_dis()
-    spents_click=true
+    all_func_click_dis();
+    spents_click = true;
   }
 });
 document
   .getElementsByClassName("spents-back")[0]
   .addEventListener("click", () => {
-    all_func_click_dis()
+    all_func_click_dis();
     spents_screen.style.animationName = "fade_out";
     setTimeout(() => {
       home_screen.style.display = "flex";
       spents_screen.style.display = "none";
     }, 450);
   });
-
 
 document.getElementsByClassName("about")[0].addEventListener("click", () => {
   all_func_dis();
@@ -823,24 +836,23 @@ document.getElementsByClassName("about")[0].addEventListener("click", () => {
     setTimeout(() => {
       about_screen.style.display = "none";
     }, 450);
-    about_click=false
-  }
-  else{
+    about_click = false;
+  } else {
     about_screen.style.display = "flex";
     about_screen.style.animationName = "fade_in";
-    all_func_click_dis()
-    about_click=true
+    all_func_click_dis();
+    about_click = true;
   }
 });
 
 document
   .getElementsByClassName("scr-abt-back")[0]
   .addEventListener("click", () => {
-    all_func_click_dis()
+    all_func_click_dis();
     about_screen.style.animationName = "fade_out";
     setTimeout(() => {
       home_screen.style.display = "flex";
-      about_screen.classList.toggle("screen-about-show");
+      about_screen.style.display = "none";
     }, 450);
   });
 
@@ -852,13 +864,12 @@ document.getElementsByClassName("feedback")[0].addEventListener("click", () => {
     setTimeout(() => {
       rating_screen.style.display = "none";
     }, 450);
-    rating_click=false
-  }
-  else{
+    rating_click = false;
+  } else {
     rating_screen.style.display = "flex";
     rating_screen.style.animationName = "fade_in";
-    all_func_click_dis()
-    rating_click=true
+    all_func_click_dis();
+    rating_click = true;
   }
 });
 
@@ -866,18 +877,18 @@ document
   .getElementsByClassName("rating-back")[0]
   .addEventListener("click", () => {
     rating_screen.style.animationName = "fade_out";
-    all_func_click_dis()
+    all_func_click_dis();
     setTimeout(() => {
       home_screen.style.display = "flex";
       rating_screen.style.display = "none";
     }, 450);
   });
 
-  document
+document
   .getElementsByClassName("question-bk")[0]
   .addEventListener("click", () => {
     help_screen.style.animationName = "fade_out";
-    all_func_click_dis()
+    all_func_click_dis();
     setTimeout(() => {
       home_screen.style.display = "flex";
       help_screen.style.display = "none";
@@ -902,38 +913,39 @@ stars.forEach((star, index1) => {
   });
 });
 
-
-
-let all_head = document.getElementsByClassName("ques-head")
-for (let i of all_head){
-  i.addEventListener("click",()=>{
-    document.getElementById(i.getAttribute("for")).classList.toggle("part-show")
-  })
+let all_head = document.getElementsByClassName("ques-head");
+for (let i of all_head) {
+  i.addEventListener("click", () => {
+    document
+      .getElementById(i.getAttribute("for"))
+      .classList.toggle("part-show");
+  });
 }
 
-
-let spent_content = document.getElementsByClassName("spent-content")[0]
+let spent_content = document.getElementsByClassName("spent-content")[0];
 function createSVG_spent() {
   const svgNS = "http://www.w3.org/2000/svg";
-  
+
   const svg = document.createElementNS(svgNS, "svg");
   svg.setAttribute("xmlns", svgNS);
   svg.setAttribute("fill", "none");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("stroke-width", "1.5");
   svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("class", "w-6 h-6");
 
   const path = document.createElementNS(svgNS, "path");
   path.setAttribute("stroke-linecap", "round");
   path.setAttribute("stroke-linejoin", "round");
-  path.setAttribute("d", "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z");
+  path.setAttribute(
+    "d",
+    "M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+  );
 
   svg.appendChild(path);
 
   return svg;
 }
-function spent_tab_creation(name,bal,data){
+function spent_tab_creation(name, bal, data) {
   // <div>
   //         <h1>Pranay <span>balacne 12</span></h1>
   //         <ul>
@@ -941,44 +953,154 @@ function spent_tab_creation(name,bal,data){
   //           <li>transaction 2</li>
   //         </ul>
   //       </div>
-  let div = document.createElement("div")
-  let h1 = document.createElement("h1")
-  h1.textContent = name
-  let span = document.createElement("span")
-  span.textContent = bal
-  h1.appendChild(span)
-  let ul = document.createElement("ul")
-  function create_li(data){
-    let li = document.createElement("li")
-    li.innerHTML = data[0]
-    let spn= document.createElement("span")
-    spn.appendChild(createSVG_spent())
-    spn.innerHTML += data[1]
-    if(parseFloat(data[1])>=0){
-      spn.style.color = "green"
-    }
-    else{
-      spn.style.color = "red"
-    }
-    li.appendChild(spn)
-    ul.appendChild(li)
+  let div = document.createElement("div");
+  let h1 = document.createElement("h1");
+  h1.textContent = name;
+  let underDiv = document.createElement("nav");
+  underDiv.appendChild(createSVG_spent());
+  let span = document.createElement("span");
+  span.textContent = bal;
+  if (parseFloat(friends_list[name]) >= 0) {
+    underDiv.style.color = "#40c057";
+  } else {
+    underDiv.style.color = "#d9480f";
   }
-  for (let i of data){
-    create_li(i)
+  underDiv.appendChild(span);
+  h1.appendChild(underDiv);
+
+  let ul = document.createElement("ul");
+  function create_li(data) {
+    let li = document.createElement("li");
+    li.innerHTML = data[0];
+    if (data[0].includes("Invested")) {
+      li.style.color = "#40c057";
+    } else {
+      li.style.color = "#d9480f";
+    }
+    let spn = document.createElement("span");
+    spn.appendChild(createSVG_spent());
+    spn.innerHTML += data[1];
+    if (parseFloat(data[1]) >= 0) {
+      spn.style.color = "green";
+    } else {
+      spn.style.color = "red";
+    }
+    li.appendChild(spn);
+    ul.appendChild(li);
   }
-  div.appendChild(h1)
-  div.appendChild(ul)
-  spent_content.appendChild(div)
+  for (let i of data) {
+    create_li(i);
+  }
+  div.appendChild(h1);
+  div.appendChild(ul);
+  spent_content.appendChild(div);
 }
-function create_tab_load(){
-  let newDiv = document.createElement("div")
-  newDiv.setAttribute("class","spent-content")
-  spent_content.parentElement.appendChild(newDiv)
-  spent_content.remove()
-  spent_content = newDiv
-  for (let i in friends_list_log){
-    spent_tab_creation(i,friends_list[i],friends_list_log[i])
+function create_tab_load() {
+  let newDiv = document.createElement("div");
+  newDiv.setAttribute("class", "spent-content");
+  spent_content.parentElement.appendChild(newDiv);
+  spent_content.remove();
+  spent_content = newDiv;
+  for (let i in friends_list_log) {
+    spent_tab_creation(i, friends_list[i], friends_list_log[i]);
   }
+  total_spents();
+}
+function total_spents() {
+  let total_spent = 0;
+  let credit = 0;
+  let debit = 0;
+  let total_credit_now = 0;
+  let selector = document.getElementsByClassName("total-spent");
+  for (let i in friends_list_log) {
+    for (let j of friends_list_log[i]) {
+      if (j[1] > 0) {
+        total_spent += parseFloat(j[1]);
+      }
+    }
+    if (friends_list[i] >= 0) {
+      credit += 1;
+      total_credit_now += friends_list[i];
+    } else {
+      debit -= 1;
+    }
+  }
+  selector[0].textContent = total_spent;
+  selector[1].textContent = total_credit_now;
+  selector[2].textContent = credit;
+  selector[3].textContent = debit;
 }
 
-create_tab_load()
+function confirm_close() {
+  document.getElementsByClassName("confirm")[0].style.display = "none";
+  document.getElementsByClassName("blur")[0].style.display = "none";
+}
+function confirm_box(head, content, func, argument = 69) {
+  document.getElementsByClassName("confirm")[0].style.display = "flex";
+  document.getElementsByClassName("blur")[0].style.display = "block";
+  document.getElementById("con-head").textContent = head;
+  document.getElementById("con-text").textContent = content;
+
+  document.getElementById("con-yes").addEventListener("click", () => {
+    if (argument != 69) {
+      func(argument);
+    } else {
+      func();
+    }
+    confirm_close();
+  });
+  document.getElementById("con-no").addEventListener("click", () => {
+    confirm_close();
+  });
+}
+
+function action(number) {
+  if (number == 0) {
+    // delete all data
+    friends_list = {};
+    friends_list_log = {};
+    update_set_data();
+    location.reload();
+  } else if (number == 1) {
+    // just delete the transactions
+    for (let i in friends_list) {
+      friends_list[i] = 0;
+      friends_list_log[i] = [];
+    }
+    update_per_person(1);
+    update_set_data();
+  } else if (number == 2) {
+    // delete all users
+    friends_list = {};
+    friends_list_log = {};
+    update_set_data();
+    location.reload();
+  } else if (number == 3) {
+    // sign out from this
+    localStorage.removeItem("user");
+    location.reload();
+  }
+}
+document.getElementsByClassName("del-all")[0].addEventListener("click", () => {
+  confirm_box("Delete Data", "Are you sure to delete all the data", action, 0);
+});
+document.getElementsByClassName("del-user")[0].addEventListener("click", () => {
+  confirm_box(
+    "Delete Users",
+    "Do you want to delete all the user's",
+    action,
+    2
+  );
+});
+document.getElementsByClassName("delete-trans")[0]
+  .addEventListener("click", () => {
+    confirm_box(
+      "Delete Transactions",
+      "Do you want to delete all the transactions by the user",
+      action,
+      1
+    );
+  });
+document.getElementsByClassName("del-sign")[0].addEventListener("click", () => {
+  confirm_box("Sign Out", "Do you want to sign out?", action, 3);
+});
